@@ -17,43 +17,51 @@ class GetStarWars{
   constructor(images){
     this.images = images
   }
-
   getInfo(searchTerm, num){
     $.ajax({
-      url: "",
+      url: `https://swapi.co/api/${searchTerm}/${num}`,
       dataType: "json",
       success: (data)=>{
         console.log(data)
-        
+        this.displayInfo(data)
       },
       error: (error)=>{
         console.log("There was an error")
       }
     })
   }
+  displayInfo(data){
+    results.innerHTML +=  `
+      <div class="container">
+        <img src="${this.images[data.name]}" alt="">
+        <div class="body">
+          <div class="info1">
+            <p>Name:</p>
+            <p>Population:</p>
+            <p>Diameter:</p>
+            <p>Climate:</p>
+          </div>
+          <div class="info2">
+            <p>${data.name}</p>
+            <p>${data.population}</p>
+            <p>${data.diameter}</p>
+            <p>${data.climate}</p>
+          </div>
+        </div>
+      </div>
+    `
+  }
   getMultiple(amount){
     results.innerHTML = ``
     if(amount <= 0){
       return
     }
-
-    for(let i=0; i < 6; i++){
-      console.log("amount")
+    for(var i=1; i<=amount; i++){
+      this.getInfo("planets", i)
     }
-    
-    //Create a for loop that loops the amount of times the value of the variable "amount" is worth. For example, if "amount" is equal to 6, the loop should go 6 times. Inside the loop call the getInfo method.
-    //getInfo("planets", 1)
-    //getInfo("planets", 2)
-    //getInfo("planets", 3)
-    //getInfo("planets", 4)
-    //getInfo("planets", 5)
-    //getInfo("planets", 6)
   }
 
-
-  displayInfo(data){
-    results.innerHTML += `
-
-    `
-  }
 }
+
+const starwars= new GetStarWars(planetImages)
+starwars.getMultiple(6)
